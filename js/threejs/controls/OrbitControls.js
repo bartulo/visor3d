@@ -494,8 +494,9 @@ THREE.OrbitControls = function ( object, domElement ) {
             var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
             var intersects = ray.intersectObjects( scene.children );
             p = intersects[0].point;
-
-            colors.push( 1, 1, 1);
+			c = hexToRgbA(color);
+            colors.push( c[0], c[1], c[2]);
+            console.log(colors)
             positions.push( p.x, p.y, p.z + .1);
             lines[lines.length-1].geometry.setPositions( positions );
             lines[lines.length-1].geometry.setColors( colors );

@@ -4,35 +4,9 @@
 		<title>three.js webgl - lines - fat</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				background-color: #000;
-				margin: 0px;
-				overflow: hidden;
-			}
-
-			#info {
-				position: absolute;
-				color: #ffffff;
-				top: 0px;
-				width: 100%;
-				padding: 5px;
-				font-family:Monospace;
-				font-size:13px;
-				text-align:center;
-			}
-			a {
-				color: #fff;
-			}
-		</style>
-	</head>
-
-	<body>
-
-		<div id="container"></div>
-
-		<div id="info"><a href="https://threejs.org" target="_blank">three.js</a> - fat lines</div>
-
+		<script src="js/jquery-2.1.4.js"></script> 
+		
+		<script src="js/bootstrap.min.js"></script>
 		<script src="js/threejs/three.js"></script>
 		<script src="js/threejs/controls/OrbitControls.js"></script>
 
@@ -48,6 +22,33 @@
 		<script src='js/lines/LineSegments2.js'></script>
 		<script src='js/lines/Line2.js'></script>
 		<script src='js/lines/Wireframe.js'></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"> 
+		<link rel="stylesheet" type="text/css" href="css/main.css"> 
+
+	</head>
+
+	<body>
+
+		<div id="container">
+			<button type="button" class="btn">Basic</button>
+			<div id="sidebar">
+				<div class="tab_content">
+				<div class="content__wrapper">
+					<h2 class="text-color">Elige un color:</h2>
+				
+					<ul class="colors">
+						<li data-color="#2ecc71"></li>
+						<li data-color="#D64A4B"></li>
+						<li data-color="#8e44ad"></li>
+						<li class="active-color" data-color="#46a1de"></li>
+						<li data-color="#bdc3c7"></li>
+					</ul>
+				</div>
+				 <input id="slide" type="range" min="330" max="1200" step="30" value="330"/>
+			</div>
+			</div>
+		</div>
+
 		
 		<script id="fragment_shh" type="x-shader/x-fragment">
 			#ifdef GL_ES
@@ -84,6 +85,19 @@
 		</script>
 
 		<script>
+			
+			function hexToRgbA(hex){
+			var c;
+			if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+				c= hex.substring(1).split('');
+				if(c.length== 3){
+					c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+				}
+				c= '0x'+c.join('');
+				return [((c>>16)&255)/255, ((c>>8)&255)/255, (c&255)/255];
+			}
+			throw new Error('Bad Hex');
+			}
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
@@ -94,13 +108,41 @@
 			var positions = [];
 			var colors = [];
 			var lines = [];
-			var a = 1;
+			var a = 2;
 			var count = 0;
+			var colorButton = $(".colors li");
+			var color = '#46a1de'
 
 			// viewport
 
 			init();
 			animate();
+			
+			$("button").on( "click", function() {
+				if (a == 1) {
+					a = 2;
+					console.log('m');
+					$('#sidebar')[0].style.marginLeft = '-310px'; 
+					this.style.left = 0; 
+				}else{
+					console.log('hola');
+					a = 1;
+					$('#sidebar')[0].style.marginLeft = '0px';
+					this.style.left = '320px'; 
+				}});
+				
+			colorButton.on("click", function(){
+		
+				// Remove class from currently active button
+				$(".colors > li").removeClass("active-color");
+		
+				// Add class active to clicked button
+				$(this).addClass("active-color");
+		
+				// Get background color of clicked
+				color = $(this).attr("data-color");
+			});	
+			
 
 			function init() {
 
@@ -108,7 +150,7 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setClearColor( 0x000000, 0.0 );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				document.body.appendChild( renderer.domElement );
+				document.getElementById('container').appendChild( renderer.domElement );
 
 				scene = new THREE.Scene();
 
@@ -169,24 +211,12 @@
 
 				// main scene
 
-				// renderer will set this eventually
-//				if ( lines.length == 3 ) {
-//					for ( i = 0, l = lines.length; i < l; i++) {
-//						lines[0].material.resolution.set( window.innerWidth, window.innerHeight );
-//						lines[1].material.resolution.set( window.innerWidth, window.innerHeight );
-//						lines[2].material.resolution.set( window.innerWidth, window.innerHeight );
-//					}
-//				}
-
 				renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
 
 				renderer.render( scene, camera );
 
 
 			}
-
-			//
-
 
 		</script>
 
