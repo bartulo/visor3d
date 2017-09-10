@@ -30,8 +30,11 @@
 	<body>
 
 		<div id="container">
-			<button type="button" class="btn">Basic</button>
-			<div id="sidebar">
+				<ul class='tabs'>
+					<li class='paint' id="paint">PINTAR</li>
+					<li class='measure' id="measure">MEDIR</li>
+				</ul>
+				<div id="sidebar">
 				<div class="tab_content">
 				<div class="content__wrapper">
 					<h2 class="text-color">Elige un color:</h2>
@@ -44,7 +47,13 @@
 						<li data-color="#bdc3c7"></li>
 					</ul>
 				</div>
-				 <input id="slide" type="range" min="330" max="1200" step="30" value="330"/>
+				<div class="slide_wrapper">
+					<input id="slide" type="range" min="4" max="20" step="1" value="8"/>
+				</div>
+				<div class="button_wrapper">
+					<button type="button" class="btn btn-danger stop">Dejar de pintar</button>
+				</div>
+
 			</div>
 			</div>
 		</div>
@@ -86,6 +95,27 @@
 
 		<script>
 			
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+			var wireframe, renderer, scene, camera, controls;
+			var plane, wireframe1, geometryLine, medir, pos;
+			var renderStats;
+			var gui;
+			var positions = [];
+			var colors = [];
+			var lines = [];
+			var a = 2;
+			var count = 0;
+			var colorButton = $(".colors li");
+			var color = '#46a1de';
+			var grosor = 4;
+
+			// viewport
+
+			init();
+			animate();
+			
 			function hexToRgbA(hex){
 			var c;
 			if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
@@ -98,37 +128,47 @@
 			}
 			throw new Error('Bad Hex');
 			}
-
-			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
-			var wireframe, renderer, scene, camera, controls;
-			var plane, wireframe1, geometryLine;
-			var renderStats;
-			var gui;
-			var positions = [];
-			var colors = [];
-			var lines = [];
-			var a = 2;
-			var count = 0;
-			var colorButton = $(".colors li");
-			var color = '#46a1de'
-
-			// viewport
-
-			init();
-			animate();
 			
-			$("button").on( "click", function() {
-				if (a == 1) {
-					a = 2;
-					console.log('m');
-					$('#sidebar')[0].style.marginLeft = '-310px'; 
-					this.style.left = 0; 
-				}else{
-					console.log('hola');
-					a = 1;
-					$('#sidebar')[0].style.marginLeft = '0px';
-					this.style.left = '320px'; 
+			function closeTab() {
+				$('#sidebar')[0].style.marginLeft = '-310px'; 
+				$('.tabs > li').css('left', '-10px');
+				a = 2;
+			}
+				
+			function openTab() {
+				$('#sidebar')[0].style.marginLeft = '0px'; 
+				$('.tabs > li').css('left', '300px');
+			}
+			
+			$(".stop").on( "click", function() {
+				closeTab();
+			});
+				
+			
+			$(".tabs > li").on( "click", function() {
+				if ( a == 1 ) {
+
+					if ( this.className == 'paint' ) {
+						closeTab();
+					} else if ( this.className == 'measure' ) {
+						a = 3;
+					} 
+
+				} else if ( a == 3 ) {
+
+					if ( this.className == 'paint' ) {
+						a = 1;
+					} else if ( this.className == 'measure' ) {
+						closeTab();
+					}
+				} else if ( a == 2 ) {
+					
+					openTab();
+					if (this.className == 'paint') {
+						a = 1;
+					} else if ( this.className == 'measure' ) {
+						a = 3;
+					}
 				}});
 				
 			colorButton.on("click", function(){
@@ -143,6 +183,9 @@
 				color = $(this).attr("data-color");
 			});	
 			
+			$('#slide').on('change', function() {
+				grosor = this.value;
+			});
 
 			function init() {
 
@@ -155,7 +198,7 @@
 				scene = new THREE.Scene();
 
 				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.set( -40, 0, 60 );
+				camera.position.set( -40, 0, 200 );
 
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
 				controls.minDistance = 10;

@@ -141,7 +141,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	var lastPosition = new THREE.Vector3();
 
-	STATE = { NONE : -1, ROTATE : 0, DOLLY : 1, PAN : 2, TOUCH_ROTATE : 3, TOUCH_DOLLY : 4, TOUCH_PAN : 5, CAMERA_ROTATE : 6, PINTAR : 7 };
+	STATE = { NONE : -1, ROTATE : 0, DOLLY : 1, PAN : 2, TOUCH_ROTATE : 3, TOUCH_DOLLY : 4, TOUCH_PAN : 5, CAMERA_ROTATE : 6, PINTAR : 7, MEDIR: 8 };
 
 	state = STATE.NONE;
 
@@ -436,7 +436,7 @@ THREE.OrbitControls = function ( object, domElement ) {
             var material = new THREE.LineMaterial( {
 
 					color: 0xffffff,
-					linewidth: 6, // in pixels
+					linewidth: grosor, // in pixels
 					vertexColors: THREE.VertexColors,
 					//resolution:  // to be set by renderer, eventually
 
@@ -447,7 +447,34 @@ THREE.OrbitControls = function ( object, domElement ) {
 			line.scale.set( 1, 1, 1 );
 			lines.push( line );
 			scene.add( line );
-			console.log(lines);
+			
+		} else if (a == 3) {
+			state = STATE.MEDIR;
+			var geometry = new THREE.LineGeometry();
+			
+            var material = new THREE.LineMaterial( {
+
+					color: 0xffffff,
+					linewidth: grosor, // in pixels
+					vertexColors: THREE.VertexColors,
+					//resolution:  // to be set by renderer, eventually
+
+			} );
+				
+			medir = new THREE.Line2( geometry, material );
+			medir.material.resolution.set( window.innerWidth, window.innerHeight );
+			medir.scale.set( 1, 1, 1 );
+			mouseDownPoint.x = ((event.clientX - renderer.domElement.offsetLeft) / window.innerWidth) * 2 - 1;
+			mouseDownPoint.y = -((event.clientY - renderer.domElement.offsetTop) / window.innerHeight) * 2 + 1;
+			var vector = new THREE.Vector3(mouseDownPoint.x, mouseDownPoint.y, 1);
+            vector.unproject(camera);
+            var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+            var intersects = ray.intersectObjects( scene.children );
+            p = intersects[0].point;
+            console.log('pe');
+            positions.push( p.x, p.y, p.z + .1);
+            colors.push( 0, 0, 0 );
+			scene.add( medir );
 			
 		} else if ( event.button === 0 ) {
 			if ( scope.noRotate === true ) return;
@@ -496,14 +523,45 @@ THREE.OrbitControls = function ( object, domElement ) {
             p = intersects[0].point;
 			c = hexToRgbA(color);
             colors.push( c[0], c[1], c[2]);
-            console.log(colors)
             positions.push( p.x, p.y, p.z + .1);
+			console.log(colors, positions, count);
             lines[lines.length-1].geometry.setPositions( positions );
             lines[lines.length-1].geometry.setColors( colors );
             lines[lines.length-1].geometry.maxInstancedCount = count;
 			count ++;
             
-			console.log(intersects[0].point);
+		} else if ( state === STATE.MEDIR ) {
+			mouseDownPoint.x = ((event.clientX - renderer.domElement.offsetLeft) / window.innerWidth) * 2 - 1;
+			mouseDownPoint.y = -((event.clientY - renderer.domElement.offsetTop) / window.innerHeight) * 2 + 1;
+			var vector = new THREE.Vector3(mouseDownPoint.x, mouseDownPoint.y, 1);
+            vector.unproject(camera);
+            count = 0;
+            var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+            var intersects = ray.intersectObjects( scene.children );
+            p = intersects[0].point;
+            pos = [];
+            pos.push(positions[0], positions[1], positions[2]);
+            console.log('holases');
+            var col = colors;
+            var vect_in = new THREE.Vector3(positions[0], positions[1], positions[2]);
+            var vect = new THREE.Vector3(p.x-positions[0], p.y-positions[1],0);
+            var l = vect.length();
+            for (i = 1; i < l; i++) {
+				vect.setLength(i);
+				var j = new THREE.Vector3();
+				j.addVectors(vect_in, vect);
+				var index = Math.trunc(Math.abs(j.y-150)*(16/30))*160 + (j.x + 150)*(16/30);
+				var h = plane.geometry.vertices[Math.round(index)].z;
+				f = intersects[0].face;
+				console.log(f.a, plane.geometry.vertices[f.a])
+				pos.push(j.x, j.y, h + .8);
+				col.push( 0, 0, 0 );
+				count ++;
+			}
+            medir.geometry.setPositions( pos );
+            medir.geometry.setColors( col );
+            medir.geometry.maxInstancedCount = count;
+            
 
 		} else if ( state === STATE.ROTATE ) {
 
@@ -563,6 +621,11 @@ THREE.OrbitControls = function ( object, domElement ) {
 		if ( state === STATE.PINTAR ) {
 			count = 0;
 			positions = [];
+			colors = []; 
+		} else if ( state === STATE.MEDIR ) {
+			count = 0;
+			positions = [];
+			console.log('adios');
 			colors = []; 
 		}
 
