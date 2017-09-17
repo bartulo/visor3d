@@ -28,30 +28,30 @@
 // TODO: controls should not reversed when upside is down
 // TODO: a target object that is visible while rotating/zooming
 
-var Q3D = {VERSION: "1.4"};
-Q3D.Controls = {
+//~ var Q3D = {VERSION: "1.4"};
+//~ Q3D.Controls = {
 
-  type: "OrbitControls",
+  //~ type: "OrbitControls",
 
-  keyList: [
-    "* Mouse",
-    "Left button + Move : Orbit",
-    "Middle button + Move : Zoom",
-    "Right button + Move : Pan",
-    "* Keys",
-    "Arrow keys : Move Horizontally",
-    "Shift + Arrow keys : Orbit",
-    "Ctrl + Arrow keys : Rotate",
-    "Shift + Ctrl + Up / Down : Zoom In / Out",
-    "R : Auto Rotate On / Off",
-    "U : Switch Upside Down"
-  ],
+  //~ keyList: [
+    //~ "* Mouse",
+    //~ "Left button + Move : Orbit",
+    //~ "Middle button + Move : Zoom",
+    //~ "Right button + Move : Pan",
+    //~ "* Keys",
+    //~ "Arrow keys : Move Horizontally",
+    //~ "Shift + Arrow keys : Orbit",
+    //~ "Ctrl + Arrow keys : Rotate",
+    //~ "Shift + Ctrl + Up / Down : Zoom In / Out",
+    //~ "R : Auto Rotate On / Off",
+    //~ "U : Switch Upside Down"
+  //~ ],
 
-  create: function (camera, domElement) {
-    return new THREE.OrbitControls(camera, domElement);
-  }
+  //~ create: function (camera, domElement) {
+    //~ return new THREE.OrbitControls(camera, domElement);
+  //~ }
 
-};
+//~ };
 
 THREE.OrbitControls = function ( object, domElement ) {
 
@@ -157,9 +157,10 @@ THREE.OrbitControls = function ( object, domElement ) {
 	var endEvent = { type: 'end'};
 
 	this.rotateLeft = function ( angle ) {
+		
 
 		if ( angle === undefined ) {
-
+			
 			angle = getAutoRotationAngle();
 
 		}
@@ -181,6 +182,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 	};
 
 	this.cameraRotateLeft = function ( angle ) {
+		
+		console.log( 'cameraRotateLeft' );
 
 		cameraThetaDelta -= angle;
 
@@ -305,7 +308,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 		}
 
 		if ( thetaDelta || phiDelta ) {
-
+			
 			offset.copy( position ).sub( this.target );
 
 			// angle from y-axis around z-axis
@@ -316,6 +319,10 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 			theta += thetaDelta;
 			phi += phiDelta;
+			
+			console.log( 'theta: '+ theta );
+			console.log( 'phi: ' + phi );
+			console.log( offset );
 
 			// restrict phi to be between desired limits
 			phi = Math.max( this.minPolarAngle, Math.min( this.maxPolarAngle, phi ) );
@@ -331,10 +338,13 @@ THREE.OrbitControls = function ( object, domElement ) {
 			offset.x = radius * Math.sin( phi ) * Math.sin( theta );
 			offset.y = radius * Math.sin( phi ) * Math.cos( theta );
 			offset.z = radius * Math.cos( phi );
-
+			
+			
 			position.copy( this.target ).add( offset );
 
 		} else if ( cameraThetaDelta || cameraPhiDelta ) {
+			
+			console.log('segundo');
 
 			offset.copy( this.target ).sub( position );
 
@@ -380,6 +390,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 		}
 
 		this.object.lookAt( this.target );
+		console.log( this.target );
 
 		thetaDelta = 0;
 		phiDelta = 0;
@@ -421,6 +432,47 @@ THREE.OrbitControls = function ( object, domElement ) {
 		return Math.pow( 0.95, scope.zoomSpeed );
 
 	}
+	
+	function createLine() {
+		
+		var geometry = new THREE.LineGeometry();
+		
+		var material = new THREE.LineMaterial( {
+	
+				color: 0xffffff,
+				linewidth: grosor, // in pixels
+				vertexColors: THREE.VertexColors,
+				//resolution:  // to be set by renderer, eventually
+	
+		} );
+			
+		var line = new THREE.Line2( geometry, material );
+		
+		line.material.resolution.set( window.innerWidth, window.innerHeight );
+		
+		line.scale.set( 1, 1, 1 );
+		
+		group.add( line );
+		
+	}
+	
+	function getIntesection() {
+		
+		mouseDownPoint.x = ((event.clientX - renderer.domElement.offsetLeft) / window.innerWidth) * 2 - 1;
+		
+		mouseDownPoint.y = -((event.clientY - renderer.domElement.offsetTop) / window.innerHeight) * 2 + 1;
+		
+		var vector = new THREE.Vector3(mouseDownPoint.x, mouseDownPoint.y, 1);
+		
+		vector.unproject(camera);
+		
+		var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+		
+		var intersects = ray.intersectObjects( scene.children );
+		
+		return intersects[0].point;
+
+	}
 
 	function onMouseDown( event ) {
 
@@ -430,26 +482,18 @@ THREE.OrbitControls = function ( object, domElement ) {
 		mouseDownPoint.set( event.clientX, event.clientY );
 		
 		if (a == 1) {
-			state = STATE.PINTAR;
-			var geometry = new THREE.LineGeometry();
 			
-            var material = new THREE.LineMaterial( {
-
-					color: 0xffffff,
-					linewidth: grosor, // in pixels
-					vertexColors: THREE.VertexColors,
-					//resolution:  // to be set by renderer, eventually
-
-			} );
-				
-			var line = new THREE.Line2( geometry, material );
-			line.material.resolution.set( window.innerWidth, window.innerHeight );
-			line.scale.set( 1, 1, 1 );
-			lines.push( line );
-			scene.add( line );
+			state = STATE.PINTAR;
+			
+			createLine();
 			
 		} else if (a == 3) {
 			state = STATE.MEDIR;
+			
+			if (medir) {
+				scene.remove( medir );
+			}
+			
 			var geometry = new THREE.LineGeometry();
 			
             var material = new THREE.LineMaterial( {
@@ -462,19 +506,18 @@ THREE.OrbitControls = function ( object, domElement ) {
 			} );
 				
 			medir = new THREE.Line2( geometry, material );
+			
 			medir.material.resolution.set( window.innerWidth, window.innerHeight );
+			
 			medir.scale.set( 1, 1, 1 );
-			mouseDownPoint.x = ((event.clientX - renderer.domElement.offsetLeft) / window.innerWidth) * 2 - 1;
-			mouseDownPoint.y = -((event.clientY - renderer.domElement.offsetTop) / window.innerHeight) * 2 + 1;
-			var vector = new THREE.Vector3(mouseDownPoint.x, mouseDownPoint.y, 1);
-            vector.unproject(camera);
-            var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-            var intersects = ray.intersectObjects( scene.children );
-            p = intersects[0].point;
-            console.log('pe');
-            positions.push( p.x, p.y, p.z + .1);
-            colors.push( 0, 0, 0 );
+			
 			scene.add( medir );
+			
+            p = getIntesection();
+            
+            positions.push( p.x, p.y, p.z + .3);
+            
+            colors.push( 0, 0, 0 );
 			
 		} else if ( event.button === 0 ) {
 			if ( scope.noRotate === true ) return;
@@ -514,57 +557,78 @@ THREE.OrbitControls = function ( object, domElement ) {
 		var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 		
 		if ( state === STATE.PINTAR ) {
-			mouseDownPoint.x = ((event.clientX - renderer.domElement.offsetLeft) / window.innerWidth) * 2 - 1;
-			mouseDownPoint.y = -((event.clientY - renderer.domElement.offsetTop) / window.innerHeight) * 2 + 1;
-			var vector = new THREE.Vector3(mouseDownPoint.x, mouseDownPoint.y, 1);
-            vector.unproject(camera);
-            var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-            var intersects = ray.intersectObjects( scene.children );
-            p = intersects[0].point;
+			
+            p = getIntesection();
+            
 			c = hexToRgbA(color);
+			
             colors.push( c[0], c[1], c[2]);
-            positions.push( p.x, p.y, p.z + .1);
-			console.log(colors, positions, count);
-            lines[lines.length-1].geometry.setPositions( positions );
-            lines[lines.length-1].geometry.setColors( colors );
-            lines[lines.length-1].geometry.maxInstancedCount = count;
+            
+            positions.push( p.x, p.y, p.z + .3);
+            
+            group.children[group.children.length-1].geometry.setPositions( positions );
+            
+            group.children[group.children.length-1].geometry.setColors( colors );
+            
+            group.children[group.children.length-1].geometry.maxInstancedCount = count;
+            
 			count ++;
             
 		} else if ( state === STATE.MEDIR ) {
-			mouseDownPoint.x = ((event.clientX - renderer.domElement.offsetLeft) / window.innerWidth) * 2 - 1;
-			mouseDownPoint.y = -((event.clientY - renderer.domElement.offsetTop) / window.innerHeight) * 2 + 1;
-			var vector = new THREE.Vector3(mouseDownPoint.x, mouseDownPoint.y, 1);
-            vector.unproject(camera);
+			
+            p = getIntesection();
+            
             count = 0;
-            var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-            var intersects = ray.intersectObjects( scene.children );
-            p = intersects[0].point;
+            
             pos = [];
+            
+            alt = [];
+            
             pos.push(positions[0], positions[1], positions[2]);
-            console.log('holases');
-            var col = colors;
+            
+            var col = [ 0, 0, 0 ];
+            
             var vect_in = new THREE.Vector3(positions[0], positions[1], positions[2]);
+            
             var vect = new THREE.Vector3(p.x-positions[0], p.y-positions[1],0);
+            
             var l = vect.length();
+            
+            $('.medicion').text( (l*(7/300)).toPrecision(3) + ' Km');
+            
             for (i = 1; i < l; i++) {
+				
 				vect.setLength(i);
+				
 				var j = new THREE.Vector3();
+				
 				j.addVectors(vect_in, vect);
-				var index = Math.trunc(Math.abs(j.y-150)*(16/30))*160 + (j.x + 150)*(16/30);
-				var h = plane.geometry.vertices[Math.round(index)].z;
-				f = intersects[0].face;
-				console.log(f.a, plane.geometry.vertices[f.a])
-				pos.push(j.x, j.y, h + .8);
+				
+				var rayOrigin = new THREE.Vector3( j.x, j.y, 200 );
+				
+				var rayDir = new THREE.Vector3( 0, 0, -1 );
+				
+				var rayC = new THREE.Raycaster( rayOrigin, rayDir );
+				
+				var ptoInt = rayC.intersectObjects( scene.children )[0].point;
+				
+				alt.push(ptoInt.z);
+				
+				pos.push(j.x, j.y, ptoInt.z + .5);
+				
 				col.push( 0, 0, 0 );
+				
 				count ++;
 			}
+
             medir.geometry.setPositions( pos );
-            medir.geometry.setColors( col );
-            medir.geometry.maxInstancedCount = count;
             
+            medir.geometry.setColors( col );
+            
+            medir.geometry.maxInstancedCount = count;
 
 		} else if ( state === STATE.ROTATE ) {
-
+			
 			if ( scope.noRotate === true ) return;
 
 			rotateEnd.set( event.clientX, event.clientY );
@@ -579,6 +643,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 			rotateStart.copy( rotateEnd );
 
 		} else if ( state === STATE.DOLLY ) {
+			
+			console.log('dolly');
 
 			if ( scope.noZoom === true ) return;
 
@@ -625,6 +691,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 		} else if ( state === STATE.MEDIR ) {
 			count = 0;
 			positions = [];
+			altitud = [];
 			console.log('adios');
 			colors = []; 
 		}
@@ -924,6 +991,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 		state = STATE.NONE;
 
 	}
+	
+	this.update();
 
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 	this.domElement.addEventListener( 'mousedown', onMouseDown, false );

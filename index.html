@@ -30,31 +30,38 @@
 	<body>
 
 		<div id="container">
-				<ul class='tabs'>
-					<li class='paint' id="paint">PINTAR</li>
-					<li class='measure' id="measure">MEDIR</li>
+			<ul class='tabs'>
+				<li class='paint' id="paint">PINTAR</li>
+				<li class='measure' id="measure">MEDIR</li>
+			</ul>
+			<div id="sidebar">
+				<ul class="tab_content">
+					<li class="active">
+						<div class="content_wrapper">
+							<h2 class="text-color">Elige un color:</h2>
+						
+							<ul class="colors">
+								<li data-color="#2ecc71"></li>
+								<li data-color="#D64A4B"></li>
+								<li data-color="#8e44ad"></li>
+								<li class="active-color" data-color="#46a1de"></li>
+								<li data-color="#bdc3c7"></li>
+							</ul>
+							<div class="slide_wrapper">
+								<input id="sliderColor" type="range" min="4" max="20" step="1" value="8"/>
+							</div>
+							<div class="button_wrapper">
+								<button type="button" class="btn btn-danger stop">Dejar de pintar</button>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="content_wrapper">
+							<h2 class="text-color">Medir</h2>
+							<div class="medicion"></div>
+						</div>
+					</li>
 				</ul>
-				<div id="sidebar">
-				<div class="tab_content">
-				<div class="content__wrapper">
-					<h2 class="text-color">Elige un color:</h2>
-				
-					<ul class="colors">
-						<li data-color="#2ecc71"></li>
-						<li data-color="#D64A4B"></li>
-						<li data-color="#8e44ad"></li>
-						<li class="active-color" data-color="#46a1de"></li>
-						<li data-color="#bdc3c7"></li>
-					</ul>
-				</div>
-				<div class="slide_wrapper">
-					<input id="slide" type="range" min="4" max="20" step="1" value="8"/>
-				</div>
-				<div class="button_wrapper">
-					<button type="button" class="btn btn-danger stop">Dejar de pintar</button>
-				</div>
-
-			</div>
 			</div>
 		</div>
 
@@ -100,17 +107,17 @@
 
 			var wireframe, renderer, scene, camera, controls;
 			var plane, wireframe1, geometryLine, medir, pos;
-			var renderStats;
-			var gui;
 			var positions = [];
 			var colors = [];
-			var lines = [];
+			var group = new THREE.Object3D();
 			var a = 2;
 			var count = 0;
+			var altitud = [];
+			var alt;
 			var colorButton = $(".colors li");
 			var color = '#46a1de';
 			var grosor = 4;
-
+			
 			// viewport
 
 			init();
@@ -140,10 +147,13 @@
 				$('.tabs > li').css('left', '300px');
 			}
 			
+			function changeSidebar(a) {
+				console.log(a);
+			}				
+			
 			$(".stop").on( "click", function() {
 				closeTab();
 			});
-				
 			
 			$(".tabs > li").on( "click", function() {
 				if ( a == 1 ) {
@@ -152,12 +162,16 @@
 						closeTab();
 					} else if ( this.className == 'measure' ) {
 						a = 3;
+						$('.tab_content > li').eq(0).hide();
+						$('.tab_content > li').eq(1).show();
 					} 
 
 				} else if ( a == 3 ) {
 
 					if ( this.className == 'paint' ) {
 						a = 1;
+						$('.tab_content > li').eq(1).hide();
+						$('.tab_content > li').eq(0).show();
 					} else if ( this.className == 'measure' ) {
 						closeTab();
 					}
@@ -165,8 +179,12 @@
 					
 					openTab();
 					if (this.className == 'paint') {
+						$('.tab_content > li').eq(1).hide();
+						$('.tab_content > li').eq(0).show();
 						a = 1;
 					} else if ( this.className == 'measure' ) {
+						$('.tab_content > li').eq(0).hide();
+						$('.tab_content > li').eq(1).show();
 						a = 3;
 					}
 				}});
@@ -183,7 +201,7 @@
 				color = $(this).attr("data-color");
 			});	
 			
-			$('#slide').on('change', function() {
+			$('#sliderColor').on('change', function() {
 				grosor = this.value;
 			});
 
@@ -196,12 +214,13 @@
 				document.getElementById('container').appendChild( renderer.domElement );
 
 				scene = new THREE.Scene();
+				scene.add(group);
 
-				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.set( -40, 0, 200 );
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+				camera.position.set( 0, -90, 200 );
 
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
-				controls.minDistance = 10;
+				controls.minDistance = 0;
 				controls.maxDistance = 500;
 				
 				//PLANO
@@ -232,6 +251,7 @@
 				
 					plane = new THREE.Mesh(geometry, material_shh);
 					scene.add(plane);
+					normalMatrix = new THREE.Matrix3().getNormalMatrix( plane.matrixWorld );
 				});
 
 				window.addEventListener( 'resize', onWindowResize, false );
