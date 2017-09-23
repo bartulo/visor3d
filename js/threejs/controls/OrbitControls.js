@@ -481,13 +481,13 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		mouseDownPoint.set( event.clientX, event.clientY );
 		
-		if (a == 0) {
+		if ( a == 0 && event.button === 0 ) {
 			
 			state = STATE.PINTAR;
 			
 			createLine();
 			
-		} else if (a == 1) {
+		} else if ( a == 1 && event.button === 0 ) {
 			state = STATE.MEDIR;
 			
 			if (medir) {
@@ -519,7 +519,7 @@ THREE.OrbitControls = function ( object, domElement ) {
             
             colors.push( 0, 0, 0 );
 			
-		} else if ( event.button === 0 ) {
+		} else if ( event.button === 0 || ( a != -1 && event.button === 1 ) ) {
 			if ( scope.noRotate === true ) return;
 
 			state = STATE.ROTATE;
