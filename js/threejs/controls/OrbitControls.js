@@ -481,13 +481,13 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		mouseDownPoint.set( event.clientX, event.clientY );
 		
-		if (a == 1) {
+		if (a == 0) {
 			
 			state = STATE.PINTAR;
 			
 			createLine();
 			
-		} else if (a == 3) {
+		} else if (a == 1) {
 			state = STATE.MEDIR;
 			
 			if (medir) {
@@ -702,14 +702,22 @@ THREE.OrbitControls = function ( object, domElement ) {
 		state = STATE.NONE;
 
 		mouseUpPoint.set( event.clientX, event.clientY );
-		if ( event.button == 0 && mouseDownPoint.equals( mouseUpPoint ) ) {
-				mouseDownPoint.x = ((event.clientX - renderer.domElement.offsetLeft) / window.innerWidth) * 2 - 1;
-				mouseDownPoint.y = -((event.clientY - renderer.domElement.offsetTop) / window.innerHeight) * 2 + 1;
-				var vector = new THREE.Vector3(mouseDownPoint.x, mouseDownPoint.y, 1);
-				vector.unproject(camera);
-				var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-				var intersects = ray.intersectObject( plane );
-            console.log( ray.intersectObjects( [plane] ) );
+		if ( event.button == 0 && mouseDownPoint.equals( mouseUpPoint ) && a == 2 ) {
+			
+			p = getIntesection();
+			
+		    var spriteMap = new THREE.TextureLoader().load("images/icono_camion.png");
+		    
+		    var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+		    
+		    var sprite = new THREE.Sprite( spriteMaterial);
+		    
+		    sprite.scale.set( 4, 4, 4);
+		    
+		    sprite.position.set(p.x, p.y, p.z + 1 );
+		    
+		    scene.add( sprite );
+
 
 		}
 

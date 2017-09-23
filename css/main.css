@@ -9,6 +9,8 @@ body {
 	position: absolute;
 	background-color: white;
 	margin-left:-310px;
+	border-right-style: solid;
+	border-width: 4px;
 }
 		
 .tabs {
@@ -17,20 +19,27 @@ body {
 	padding:0;
 	}
 	
-.tabs #paint{
+.tabs li{
 	position: absolute;
-	top: 20px;
 	background-color: white;
 	border-radius: 0px 0px 5px 5px;
 	cursor: pointer;
 	width:100px;
 	height: 60px;
 	left:-10px;
-	top:30px;
 	padding: 20px;
 	transform: rotate(-90deg);
 }
 
+.tabs .active{
+	border-style: none solid solid;
+	border-width: 4px;
+	border-radius: 0px 0px 10px 10px;
+	z-index: 10;
+	height: 68px;
+}
+
+/*
 .tabs #measure{
 	position: absolute;
 	top: 20px;
@@ -44,6 +53,7 @@ body {
 	padding: 20px;
 	transform: rotate(-90deg);
 }
+*/
 
 .tab__content{
 	background-color: white;
