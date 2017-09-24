@@ -51,6 +51,9 @@
 							<div class="slide_wrapper">
 								<input id="sliderColor" type="range" min="4" max="20" step="1" value="8"/>
 							</div>
+							<div class="lines_wrapper">
+								<ul class="lines"></ul>
+							</div>
 							<div class="button_wrapper">
 								<button type="button" class="btn btn-danger stop">Dejar de pintar</button>
 							</div>
@@ -123,6 +126,7 @@
 			var colors = [];
 			var group = new THREE.Object3D();
 			var a = -1;
+			var b = 0;
 			var count = 0;
 			var altitud = [];
 			var alt;

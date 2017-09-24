@@ -499,7 +499,7 @@ THREE.OrbitControls = function ( object, domElement ) {
             var material = new THREE.LineMaterial( {
 
 					color: 0xffffff,
-					linewidth: grosor, // in pixels
+					linewidth: 6, // in pixels
 					vertexColors: THREE.VertexColors,
 					//resolution:  // to be set by renderer, eventually
 
@@ -688,6 +688,13 @@ THREE.OrbitControls = function ( object, domElement ) {
 			count = 0;
 			positions = [];
 			colors = []; 
+			$('.lines').append('<li>Linea 1 <button type="button" class="close" aria-label="Close">x</button></li>');
+			$( 'button.close' ).on('click', function() {
+				var index = $( this.parentElement ).index();
+				group.remove( group.children[index] );
+				this.parentElement.remove();
+			});
+			
 		} else if ( state === STATE.MEDIR ) {
 			count = 0;
 			positions = [];
