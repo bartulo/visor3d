@@ -133,6 +133,7 @@
 			var colorButton = $(".colors li");
 			var color = '#46a1de';
 			var grosor = 4;
+			var interval;
 			
 			// viewport
 
@@ -221,6 +222,63 @@
 					}
 						
 			}});
+			
+			function eraseLine( event ) {
+				var index = $(event.target.parentElement).index();
+						
+				clearInterval( interval );
+		
+				$('.lines >li')[index].remove();
+				
+				group.remove(group.children[index]);
+				
+			}
+			
+			function hoverLine( event ) {
+				if ( event.target.tagName === 'LI' ) {
+				
+					var index = $(event.target).index();
+					
+				} else if ( event.target.tagName === 'BUTTON' ) {
+				
+					var index = $(event.target.parentElement).index();
+					
+				}
+				
+				//~ group.children[index].material.visible = true;
+
+				interval = setInterval( function() {
+					if ( group.children[index].material.visible ) {
+						console.log('true');
+						
+						group.children[index].material.visible = false;
+						
+					} else {
+						console.log('false');
+						
+						group.children[index].material.visible = true;
+					}
+				}, 800);
+				
+				console.log( interval );
+						
+			}
+			
+			function unhoverLine( event ) {
+				if ( event.target.tagName === 'LI' ) {
+				
+					var index = $(event.target).index();
+					
+				} else if ( event.target.tagName === 'BUTTON' ) {
+				
+					var index = $(event.target.parentElement).index();
+					
+				}
+				
+				clearInterval( interval );
+				
+				group.children[index].material.visible = true;
+			}
 				
 			colorButton.on("click", function(){
 		

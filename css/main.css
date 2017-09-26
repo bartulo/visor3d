@@ -119,6 +119,7 @@ body {
 
 .lines{
 	text-align: left;
+	padding: 0px;
 }
 
 .lines li{

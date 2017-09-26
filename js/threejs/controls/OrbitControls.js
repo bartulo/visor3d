@@ -686,21 +686,30 @@ THREE.OrbitControls = function ( object, domElement ) {
 		
 		if ( state === STATE.PINTAR ) {
 			count = 0;
+			
 			positions = [];
+			
 			colors = []; 
-			$('.lines').append('<li>Linea 1 <button type="button" class="close" aria-label="Close">x</button></li>');
-			$( 'button.close' ).on('click', function() {
-				var index = $( this.parentElement ).index();
-				group.remove( group.children[index] );
-				this.parentElement.remove();
-			});
+			
+			$('.lines').append('<li class="list-group-item">Linea 1 <button type="button" class="close" aria-label="Close">x</button></li>');
+			
+			$( 'button.close' ).last()[0].addEventListener( 'click', eraseLine, false );
+
+			$( 'button.close' ).last()[0].parentElement.addEventListener( 'mouseover', hoverLine, false );
+			
+			$( 'button.close' ).last()[0].parentElement.addEventListener( 'mouseout', unhoverLine, false );
 			
 		} else if ( state === STATE.MEDIR ) {
 			count = 0;
+			
 			positions = [];
+			
 			altitud = [];
+			
 			console.log('adios');
+			
 			colors = []; 
+			
 		}
 
 		scope.domElement.removeEventListener( 'mousemove', onMouseMove, false );
