@@ -98,23 +98,31 @@ body {
 }
 	
 .colors > li:nth-child(1){
-	background-color: #2ecc71;
+	background-color: #00b0f0;
 }
 	
 .colors > li:nth-child(2){
-	background-color: #D64A4B;
+	background-color: #ff0000;
 }
 		
 .colors > li:nth-child(3){
-	background-color: #8e44ad;
+	background-color: #92d050;
 }
 		
 .colors > li:nth-child(4){
-	background-color: #46a1de;
+	background-color: #fa7e5c;
 }
 		
 .colors > li:nth-child(5){
-	background-color: #bdc3c7;
+	background-color: #000000;
+}
+
+.colors > li:nth-child(6){
+	background-color: #fab8f2;
+}
+
+.colors > li:nth-child(7){
+	background-color: #944607;
 }
 
 .lines{

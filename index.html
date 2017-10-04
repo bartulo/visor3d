@@ -34,6 +34,7 @@
 				<li>PINTAR</li>
 				<li>MEDIR</li>
 				<li>ICONOS</li>
+				<li>IMAGEN</li>
 			</ul>
 			<div id="sidebar">
 				<ul class="tab_content">
@@ -42,11 +43,13 @@
 							<h2 class="text-color">Elige un color:</h2>
 						
 							<ul class="colors">
-								<li data-color="#2ecc71"></li>
-								<li data-color="#D64A4B"></li>
-								<li data-color="#8e44ad"></li>
-								<li class="active-color" data-color="#46a1de"></li>
-								<li data-color="#bdc3c7"></li>
+								<li data-color="#00b0f0"></li>
+								<li data-color="#ff0000"></li>
+								<li data-color="#92d050"></li>
+								<li class="active-color" data-color="#fa7e5c"></li>
+								<li data-color="#000000"></li>
+								<li data-color="#fab8f2"></li>
+								<li data-color="#944607"></li>
 							</ul>
 							<div class="slide_wrapper">
 								<input id="sliderColor" type="range" min="4" max="20" step="1" value="8"/>
@@ -54,11 +57,13 @@
 							<div class="lines_wrapper">
 								<ul class="lines"></ul>
 							</div>
+							<a href="" id="download" download="canvasexport.png">Descargar</a>
 							<div class="button_wrapper">
 								<button type="button" class="btn btn-danger stop">Dejar de pintar</button>
 							</div>
 						</div>
 					</li>
+					
 					<li>
 						<div class="content_wrapper">
 							<h2 class="text-color">Medir</h2>
@@ -68,6 +73,7 @@
 							</div>
 						</div>
 					</li>
+					
 					<li>
 						<div class="content_wrapper">
 							<h2 class="text-color">Iconos</h2>
@@ -76,6 +82,17 @@
 							</div>
 						</div>
 					</li>
+					
+					<li>
+						<div class="content_wrapper">
+							<h2 class="text-color">Guardar Imagen</h2>
+							<div class="button_wrapper">
+								<button type="button" class="btn btn-danger stop">Volver</button>
+								<button type="button" class="btn" id="saveImg">Guardar Imagen</button>
+							</div>
+						</div>
+					</li>
+					
 				</ul>
 			</div>
 		</div>
@@ -131,7 +148,7 @@
 			var altitud = [];
 			var alt;
 			var colorButton = $(".colors li");
-			var color = '#46a1de';
+			var color = '#fa7e5c';
 			var grosor = 4;
 			var interval;
 			
@@ -173,10 +190,6 @@
 				$('#sidebar')[0].style.marginLeft = '0px'; 
 				$('.tabs > li').css('left', '300px');
 			}
-			
-			function changeSidebar(a) {
-				console.log(a);
-			}				
 			
 			$(".stop").on( "click", function() {
 				closeTab(a);
@@ -258,7 +271,7 @@
 						
 						group.children[index].material.visible = true;
 					}
-				}, 800);
+				}, 160);
 				
 				console.log( interval );
 						
@@ -295,10 +308,31 @@
 			$('#sliderColor').on('change', function() {
 				grosor = this.value;
 			});
+			
+			$('#saveImg').on('click', function() {
+				
+				var canvas = renderer.domElement;
+				
+				var imgData = canvas.toDataURL('image/jpeg');
+				
+				var imgLink = document.createElement('a');
+				
+				document.body.appendChild(imgLink);
+				
+				imgLink.download = 'prueba.jpg';
+				
+				imgLink.href = imgData.replace('image/jpeg', 'image/octet-stream');
+				
+				imgLink.click();
+				
+				document.body.removeChild(imgLink);
+				
+			});
+								
 
 			function init() {
 
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer = new THREE.WebGLRenderer( { antialias: true, preserveDrawingBuffer: true  } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setClearColor( 0x000000, 0.0 );
 				renderer.setSize( window.innerWidth, window.innerHeight );
@@ -324,7 +358,7 @@
 			
 					var uniforms = {    // custom uniforms (your textures)
 
-					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( '') },
+					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E2.png') },
 					tSec: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/pnoa.jpg' ) }
 					};
 					
@@ -334,10 +368,10 @@
 						fragmentShader: fragShader
 					});
 				
-					var geometry = new THREE.PlaneGeometry(300, 300, 159, 159);
+					var geometry = new THREE.PlaneGeometry(300, 300, 199, 199);
 			
 					for (var i = 0, l = geometry.vertices.length; i < l; i++) {
-						geometry.vertices[i].z = data[i] / 65535 * 510;
+						geometry.vertices[i].z = data[i] / 65535 * 310;
 					}
 				
 					plane = new THREE.Mesh(geometry, material_shh);
