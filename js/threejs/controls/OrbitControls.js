@@ -622,12 +622,16 @@ THREE.OrbitControls = function ( object, domElement ) {
 				
 				count ++;
 			}
-
+			
+			pos.push( p.x, p.y, p.z );
+			
+			col.push( 0, 0, 0 );
+			
             medir.geometry.setPositions( pos );
             
             medir.geometry.setColors( col );
             
-            medir.geometry.maxInstancedCount = count;
+            medir.geometry.maxInstancedCount = 15;
 
 		} else if ( state === STATE.ROTATE ) {
 			
@@ -724,7 +728,13 @@ THREE.OrbitControls = function ( object, domElement ) {
 			
 			p = getIntesection();
 			
-		    var spriteMap = new THREE.TextureLoader().load("images/icono_camion.png");
+			var iconIndex = $('.icon >li a.active').parent().index();
+			
+			console.log(iconIndex);
+			
+			var icons = ['camion', 'helicoptero', 'observador', 'pma', 'reten', 'todoterreno']
+			
+		    var spriteMap = new THREE.TextureLoader().load("images/iconos/" + icons[iconIndex] + ".png");
 		    
 		    var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
 		    

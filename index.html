@@ -76,6 +76,16 @@
 					<li>
 						<div class="content_wrapper">
 							<h2 class="text-color">Iconos</h2>
+							<nav>
+								<ul class="icon">
+									<li><a class="active"></a></li>
+									<li><a></a></li>
+									<li><a></a></li>
+									<li><a></a></li>
+									<li><a></a></li>
+									<li><a></a></li>
+								</ul>
+							</nav>
 							<div class="button_wrapper">
 								<button type="button" class="btn btn-danger stop">Volver</button>
 							</div>
@@ -326,6 +336,13 @@
 				
 				document.body.removeChild(imgLink);
 				
+			});
+			
+			$('.icon >li a').on('click', function() {
+				
+				$('.icon >li a').removeClass('active');
+				
+				$(this).addClass('active');
 			});
 								
 

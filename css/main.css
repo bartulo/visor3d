@@ -151,3 +151,82 @@ body {
 	padding: 30px 20px;
 	text-align: center;
 }
+
+/*ICONOS*/
+
+.icon {
+	list-style: none;
+	text-align: center;
+	padding-left: 20px;
+	padding-top: 20px;
+}
+
+.icon li {
+	position: relative;
+	display: inline-block;
+	margin-right: -4px;
+	padding-bottom: 20px;
+	width: 140px;
+}
+
+.icon a {
+	display: block;
+	background-color: #f7f7f7;
+	color: #a7a7a7;
+	margin: 36px;
+	width: 120px;
+	height: 120px;
+	position: relative;
+	text-align: center;
+	margin: 4px;
+	cursor: pointer;
+	border-radius: 50%;
+	box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+}
+
+.icon a.active {
+	box-shadow: 2px 2px 6px 3px #e60000 inset;
+}
+
+.icon > li:nth-child(1) a{
+	background-image: url('../images/iconos/camion.png');
+	background-size: 100px 100px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.icon > li:nth-child(2) a{
+	background-image: url('../images/iconos/helicoptero.png');
+	background-size: 100px 100px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.icon > li:nth-child(3) a{
+	background-image: url('../images/iconos/observador.png');
+	background-size: 100px 100px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.icon > li:nth-child(4) a{
+	background-image: url('../images/iconos/pma.png');
+	background-size: 100px 100px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.icon > li:nth-child(5) a{
+	background-image: url('../images/iconos/reten.png');
+	background-size: 100px 100px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.icon > li:nth-child(6) a{
+	background-image: url('../images/iconos/todoterreno.png');
+	background-size: 100px 100px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
