@@ -22,6 +22,7 @@
 		<script src='js/lines/LineSegments2.js'></script>
 		<script src='js/lines/Line2.js'></script>
 		<script src='js/lines/Wireframe.js'></script>
+		<script src="js/sidebar/sidebar.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"> 
 		<link rel="stylesheet" type="text/css" href="css/main.css"> 
 
@@ -78,12 +79,12 @@
 							<h2 class="text-color">Iconos</h2>
 							<nav>
 								<ul class="icon">
-									<li><a class="active"></a></li>
-									<li><a></a></li>
-									<li><a></a></li>
-									<li><a></a></li>
-									<li><a></a></li>
-									<li><a></a></li>
+									<li data-img="camion"><a class="active"></a></li>
+									<li data-img="helicoptero"><a></a></li>
+									<li data-img="observador"><a></a></li>
+									<li data-img="pma"><a></a></li>
+									<li data-img="reten"><a></a></li>
+									<li data-img="todoterreno"><a></a></li>
 								</ul>
 							</nav>
 							<div class="button_wrapper">
@@ -151,201 +152,18 @@
 			var positions = [];
 			var colors = [];
 			var group = new THREE.Object3D();
+			var groupIcons = new THREE.Object3D();
 			var a = -1;
 			var b = 0;
 			var count = 0;
 			var altitud = [];
 			var alt;
-			var colorButton = $(".colors li");
-			var color = '#fa7e5c';
-			var grosor = 4;
-			var interval;
 			
 			// viewport
 
 			init();
 			animate();
 			
-			$( document ).ready( function() {
-				console.log( $('.tabs >li').length );
-				for ( i = 0; i < $('.tabs >li').length; i++) {
-					tabTop = 30 + ( i * 110);
-					$('.tabs >li')[i].style.top = tabTop + 'px' ;
-				}
-			});
-			
-			function hexToRgbA(hex){
-			var c;
-			if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-				c= hex.substring(1).split('');
-				if(c.length== 3){
-					c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-				}
-				c= '0x'+c.join('');
-				return [((c>>16)&255)/255, ((c>>8)&255)/255, (c&255)/255];
-			}
-			throw new Error('Bad Hex');
-			}
-			
-			function closeTab(index) {
-				$('#sidebar')[0].style.marginLeft = '-310px'; 
-				$('.tabs > li').css('left', '-10px');
-				$('.tab_content >li').eq( index ).hide();
-				$(".tabs >li").removeClass('active');
-				a = -1;
-			}
-				
-			function openTab() {
-				$('#sidebar')[0].style.marginLeft = '0px'; 
-				$('.tabs > li').css('left', '300px');
-			}
-			
-			$(".stop").on( "click", function() {
-				closeTab(a);
-			});
-			
-			$(".tabs > li").on( "click", function() {
-					
-				var index = $(this).index();
-
-				if ( a == -1 ) {
-					
-					$(this).addClass('active');
-					
-					$('.tab_content >li').eq(index).show();
-					
-					a = index;
-					
-					openTab();
-					
-				} else {
-					
-					if (index == a) {
-						
-						$(".tabs >li").removeClass('active');
-						
-						closeTab();
-						
-						a = -1;
-						
-						$('.tab_content >li').eq(index).hide();
-
-					} else {
-						
-						$(".tabs >li").removeClass('active');
-
-						$(this).addClass('active');
-					
-						$('.tab_content >li').eq(a).hide();
-
-						$('.tab_content >li').eq(index).show();
-						
-						a = index;
-					}
-						
-			}});
-			
-			function eraseLine( event ) {
-				var index = $(event.target.parentElement).index();
-						
-				clearInterval( interval );
-		
-				$('.lines >li')[index].remove();
-				
-				group.remove(group.children[index]);
-				
-			}
-			
-			function hoverLine( event ) {
-				if ( event.target.tagName === 'LI' ) {
-				
-					var index = $(event.target).index();
-					
-				} else if ( event.target.tagName === 'BUTTON' ) {
-				
-					var index = $(event.target.parentElement).index();
-					
-				}
-				
-				//~ group.children[index].material.visible = true;
-
-				interval = setInterval( function() {
-					if ( group.children[index].material.visible ) {
-						console.log('true');
-						
-						group.children[index].material.visible = false;
-						
-					} else {
-						console.log('false');
-						
-						group.children[index].material.visible = true;
-					}
-				}, 160);
-				
-				console.log( interval );
-						
-			}
-			
-			function unhoverLine( event ) {
-				if ( event.target.tagName === 'LI' ) {
-				
-					var index = $(event.target).index();
-					
-				} else if ( event.target.tagName === 'BUTTON' ) {
-				
-					var index = $(event.target.parentElement).index();
-					
-				}
-				
-				clearInterval( interval );
-				
-				group.children[index].material.visible = true;
-			}
-				
-			colorButton.on("click", function(){
-		
-				// Remove class from currently active button
-				$(".colors > li").removeClass("active-color");
-		
-				// Add class active to clicked button
-				$(this).addClass("active-color");
-		
-				// Get background color of clicked
-				color = $(this).attr("data-color");
-			});	
-			
-			$('#sliderColor').on('change', function() {
-				grosor = this.value;
-			});
-			
-			$('#saveImg').on('click', function() {
-				
-				var canvas = renderer.domElement;
-				
-				var imgData = canvas.toDataURL('image/jpeg');
-				
-				var imgLink = document.createElement('a');
-				
-				document.body.appendChild(imgLink);
-				
-				imgLink.download = 'prueba.jpg';
-				
-				imgLink.href = imgData.replace('image/jpeg', 'image/octet-stream');
-				
-				imgLink.click();
-				
-				document.body.removeChild(imgLink);
-				
-			});
-			
-			$('.icon >li a').on('click', function() {
-				
-				$('.icon >li a').removeClass('active');
-				
-				$(this).addClass('active');
-			});
-								
-
 			function init() {
 
 				renderer = new THREE.WebGLRenderer( { antialias: true, preserveDrawingBuffer: true  } );
@@ -359,6 +177,8 @@
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 				camera.position.set( 0, -90, 200 );
+				scene.add(group);
+				scene.add(groupIcons);
 
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
 				controls.minDistance = 0;
