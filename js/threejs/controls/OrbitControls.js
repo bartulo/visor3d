@@ -730,34 +730,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 			
 			var iconIndex = $('.icon >li a.active').parent().index();
 			
-			var icons = ['camion2', 'helicoptero', 'observador', 'pma', 'reten', 'todoterreno']
-			
-		    var spriteMap = new THREE.TextureLoader().load("images/iconos/" + icons[iconIndex] + ".png");
+		    iconsGroup.children[iconIndex].position.set(p.x, p.y, p.z + 2 );
 		    
-		    var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
-		    
-		    var sprite = new THREE.Sprite( spriteMaterial);
-		    
-		    sprite.scale.set( 6, 6, 6);
-		    
-		    sprite.position.set(p.x, p.y, p.z + 10 );
-		    
-		    scene.add( sprite );
-		    
-		    var lineMaterial = new THREE.LineBasicMaterial({
-				color: 0x000000,
-				linewidth: 4
-			});
-			
-			var geometry = new THREE.Geometry();
-			
-			geometry.vertices.push(
-				new THREE.Vector3( p.x, p.y, p.z ),
-				new THREE.Vector3( p.x, p.y, p.z + 10 )
-			);
-			
-			var line = new THREE.Line( geometry, lineMaterial );
-			scene.add( line );
 		}
 
 	}
