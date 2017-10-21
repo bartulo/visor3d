@@ -3,6 +3,19 @@ body {
 	margin: 0px;
 	overflow: hidden;
 }
+
+#brujula {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0,0,0,0.4);
+    margin:20px;
+    padding:0px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    z-index: 100;
+}
+
 #sidebar {
 	height: 100%;
 	width:320px;
@@ -139,7 +152,25 @@ body {
 		position: relative;
 }		
 
+.icon_list{
+	text-align: left;
+	padding: 0px;
+}
+
+.icon_list li{
+		list-style: none;
+		display: inline-block;
+		margin: 0 10px;
+		cursor: pointer;
+		position: relative;
+}		
+
+
 .lines_wrapper {
+	padding: 20px 50px;
+}
+
+.icon_list_wrapper {
 	padding: 20px 50px;
 }
 

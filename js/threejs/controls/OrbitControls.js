@@ -699,11 +699,11 @@ THREE.OrbitControls = function ( object, domElement ) {
 			
 			$('.lines').append('<li class="list-group-item">Linea 1 <button type="button" class="close" aria-label="Close">x</button></li>');
 			
-			$( 'button.close' ).last()[0].addEventListener( 'click', eraseLine, false );
+			$('.lines').children().last().children()[0].addEventListener( 'click', eraseLine, false );
 
-			$( 'button.close' ).last()[0].parentElement.addEventListener( 'mouseover', hoverLine, false );
+			$('.lines').children().last().children()[0].parentElement.addEventListener( 'mouseover', hoverLine, false );
 			
-			$( 'button.close' ).last()[0].parentElement.addEventListener( 'mouseout', unhoverLine, false );
+			$('.lines').children().last().children()[0].parentElement.addEventListener( 'mouseout', unhoverLine, false );
 			
 		} else if ( state === STATE.MEDIR ) {
 			count = 0;
@@ -711,8 +711,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 			positions = [];
 			
 			altitud = [];
-			
-			console.log('adios');
 			
 			colors = []; 
 			
@@ -730,7 +728,27 @@ THREE.OrbitControls = function ( object, domElement ) {
 			
 			var iconIndex = $('.icon >li a.active').parent().index();
 			
-		    iconsGroup.children[iconIndex].position.set(p.x, p.y, p.z + 2 );
+			var group = iconsGroup.children[iconIndex];
+			
+			console.log( group );
+			
+			if (group.visible == false ) { 
+				
+				group.visible = true; 
+			
+			} else {
+				
+				var newIcon = group.children[0].clone();
+				
+				group.add( newIcon );
+				
+			}
+			
+		    group.children[ group.children.length - 1 ].position.set(p.x, p.y, p.z + 10 );
+		    
+			$('.icon_list').append('<li class="list-group-item">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
+			
+			$('.icon_list').children().last().children()[0].addEventListener( 'click', eraseIcon, false );
 		    
 		}
 

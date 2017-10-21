@@ -112,6 +112,29 @@ function eraseLine( event ) {
 	
 }
 
+function eraseIcon( event ) {
+	var index = $(event.target.parentElement).index();
+	
+	var iconIndex = $('.icon >li a.active').parent().index();
+	
+	console.log( index );
+			
+	//~ clearInterval( interval );
+
+	$('.icon_list > li')[index].remove();
+	
+	if ( iconsGroup.children[iconIndex].children.length == 1 ) {
+		
+		iconsGroup.children[iconIndex].visible = false 
+		
+	} else {
+ 	
+		iconsGroup.children[iconIndex].remove(iconsGroup.children[iconIndex].children[index]);
+		
+	}
+	
+}
+
 function hoverLine( event ) {
 	if ( event.target.tagName === 'LI' ) {
 	
@@ -170,7 +193,7 @@ function colorClicked(){
 	color = $(this).attr("data-color");
 };	
 
-$('#saveImg').on('click', function() {
+function saveImage() {
 	
 	var canvas = renderer.domElement;
 	
@@ -188,13 +211,34 @@ $('#saveImg').on('click', function() {
 	
 	document.body.removeChild(imgLink);
 	
-});
+};
 
 function iconClicked() {
 	
 	$('.icon >li a').removeClass('active');
 	
 	$(this).addClass('active');
+	
+	var index = $(this).parent().index();
+	
+	var list = $('.icon_list');
+	
+	list.children().remove();
+		
+	var group = iconsGroup.children[index];
+	
+	if ( group.visible != false ) {
+	
+		for ( i = 0; i < group.children.length; i++ ) {
+			
+			$('.icon_list').append('<li class="list-group-item">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
+			
+			$( 'button.close' ).last()[0].addEventListener( 'click', eraseIcon, false );
+		
+		}
+		
+	}
+
 };
 					
 
