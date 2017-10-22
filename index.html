@@ -153,6 +153,7 @@
 
 			var wireframe, renderer, renderer2, scene, scene2, camera, camera2, controls;
 			var plane, wireframe1, geometryLine, medir, pos;
+			var aspectRatio = window.innerWidth / window.innerHeight;
 			var positions = [];
 			var colors = [];
 			var brujula_width = 200;
@@ -161,6 +162,7 @@
 			var iconsGroup = new THREE.Object3D();
 			var a = -1;
 			var b = 0;
+			var camera3Active = false;
 			var count = 0;
 			var altitud = [];
 			var alt;
@@ -183,6 +185,9 @@
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 				camera.position.set( 0, -90, 200 );
+				camera3 = new THREE.OrthographicCamera( -150 * aspectRatio, 150 * aspectRatio, 150, -150, 0.1, 1000 );
+				camera3.position.set( 0, 0, 350 );
+				camera3.rotation.set( 0, 0, 0 );
 
 				//~ ICONOS
 				
@@ -200,7 +205,7 @@
 				    
 				    var sprite = new THREE.Sprite( spriteMaterial);
 				    
-				    sprite.scale.set( 6, 6, 6);
+				    sprite.scale.set( 8, 8, 8 );
 			    
 				    iconPlusLine.add( sprite );
 				    
@@ -294,9 +299,16 @@
 			
 
 			function onWindowResize() {
+				
+				aspectRatio = window.innerWidth / window.innerHeight;
 
-				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.aspect = aspectRatio;
 				camera.updateProjectionMatrix();
+				
+				camera3.left = -150 * aspectRatio;
+				camera3.right = 150 * aspectRatio;
+				camera3.updateProjectionMatrix();
+
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -310,10 +322,18 @@
 
 				renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
 
-				renderer.render( scene, camera );
+				if ( camera3Active === false ) {
+
+					renderer.render( scene, camera );
+
+				} else {
+					
+					renderer.render( scene, camera3 );
+
+				}
 
 				renderer2.render(scene2, camera2);
-				
+
 				camera2.position.copy( camera.position );
 				camera2.position.sub( controls.target );
 				camera2.position.setLength( 200 );

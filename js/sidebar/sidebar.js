@@ -26,6 +26,8 @@ $( document ).ready( function() {
 	for ( i = 0; i < $('.stop').length; i++ ) {
 		$('.stop')[i].addEventListener( 'click', stopClicked, false );
 	}
+	
+	$('#saveImg')[0].addEventListener( 'click', saveImage, false );
 });
 
 function hexToRgbA(hex){
@@ -195,23 +197,31 @@ function colorClicked(){
 
 function saveImage() {
 	
-	var canvas = renderer.domElement;
+	camera3Active = true;
 	
-	var imgData = canvas.toDataURL('image/jpeg');
+	setTimeout(function() {
 	
-	var imgLink = document.createElement('a');
+		var canvas = renderer.domElement;
+		
+		var imgData = canvas.toDataURL('image/jpeg');
+		
+		var imgLink = document.createElement('a');
+		
+		document.body.appendChild(imgLink);
+		
+		imgLink.download = 'prueba.jpg';
+		
+		imgLink.href = imgData.replace('image/jpeg', 'image/octet-stream');
+		
+		imgLink.click();
+		
+		document.body.removeChild(imgLink);
 	
-	document.body.appendChild(imgLink);
+		camera3Active = false;
+		
+	},200);
 	
-	imgLink.download = 'prueba.jpg';
-	
-	imgLink.href = imgData.replace('image/jpeg', 'image/octet-stream');
-	
-	imgLink.click();
-	
-	document.body.removeChild(imgLink);
-	
-};
+}
 
 function iconClicked() {
 	
