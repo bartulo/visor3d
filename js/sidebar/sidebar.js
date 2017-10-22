@@ -182,6 +182,40 @@ function unhoverLine( event ) {
 	
 	group.children[index].material.visible = true;
 }
+
+function hoverIcon() {
+	if ( event.target.tagName === 'LI' ) {
+	
+		var index = $(event.target).index();
+		
+	} else if ( event.target.tagName === 'BUTTON' ) {
+	
+		var index = $(event.target.parentElement).index();
+		
+	}
+	
+	var iconIndex = $('.icon >li a.active').parent().index();
+	
+	iconsGroup.children[iconIndex].children[index].scale.set( 1.5, 1.5, 1.5 );
+
+}
+
+function unhoverIcon() {
+	if ( event.target.tagName === 'LI' ) {
+	
+		var index = $(event.target).index();
+		
+	} else if ( event.target.tagName === 'BUTTON' ) {
+	
+		var index = $(event.target.parentElement).index();
+		
+	}
+
+	var iconIndex = $('.icon >li a.active').parent().index();
+
+	iconsGroup.children[iconIndex].children[index].scale.set( 1, 1, 1 );
+
+}
 	
 function colorClicked(){
 

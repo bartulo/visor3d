@@ -746,7 +746,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 			
 		    group.children[ group.children.length - 1 ].position.set(p.x, p.y, p.z + 10 );
 		    
-			$('.icon_list').append('<li class="list-group-item">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
+			$('.icon_list').append('<li class="list-group-item" onmouseover="hoverIcon()" onmouseout="unhoverIcon()">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
 			
 			$('.icon_list').children().last().children()[0].addEventListener( 'click', eraseIcon, false );
 		    
