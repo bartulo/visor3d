@@ -172,6 +172,8 @@ body {
 
 .icon_list_wrapper {
 	padding: 20px 50px;
+	max-height: 160px;
+	overflow-y: scroll;
 }
 
 .slide_wrapper {

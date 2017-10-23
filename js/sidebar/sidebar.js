@@ -119,15 +119,13 @@ function eraseIcon( event ) {
 	
 	var iconIndex = $('.icon >li a.active').parent().index();
 	
-	console.log( index );
-			
-	//~ clearInterval( interval );
-
 	$('.icon_list > li')[index].remove();
+
+	iconsGroup.children[iconIndex].children[index].scale.set( 1, 1, 1 ); 
 	
 	if ( iconsGroup.children[iconIndex].children.length == 1 ) {
 		
-		iconsGroup.children[iconIndex].visible = false 
+		iconsGroup.children[iconIndex].visible = false;
 		
 	} else {
  	
