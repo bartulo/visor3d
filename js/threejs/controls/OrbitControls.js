@@ -726,6 +726,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 			
 			p = getIntesection();
 			
+			console.log(p);
+			
 			var iconIndex = $('.icon >li a.active').parent().index();
 			
 			var group = iconsGroup.children[iconIndex];

@@ -23,6 +23,7 @@
 		<script src='js/lines/Line2.js'></script>
 		<script src='js/lines/Wireframe.js'></script>
 		<script src="js/sidebar/sidebar.js"></script>
+		<script src="js/labels/labels.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"> 
 		<link rel="stylesheet" type="text/css" href="css/main.css"> 
 
@@ -31,6 +32,14 @@
 	<body>
 
 		<div id="container">
+
+			<div class="label_container">
+				<div class="label" data-coords="[ -115, 36, 48 ]">Inicio 3</div>
+				<div class="label" data-coords="[ -82, -32, 57 ]">Inicio 2</div>
+				<div class="label" data-coords="[ -31, -64, 65 ]">Inicio 1</div>
+				<div class="label" data-coords="[ 2, 36, 58 ]">Inicio 4</div>
+			</div>
+					
 			<ul class='tabs'>
 				<li>PINTAR</li>
 				<li>MEDIR</li>
@@ -152,7 +161,7 @@
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			var wireframe, renderer, renderer2, scene, scene2, camera, camera2, controls;
-			var plane, wireframe1, geometryLine, medir, pos;
+			var plane, wireframe1, geometryLine, medir, pos, lab;
 			var aspectRatio = window.innerWidth / window.innerHeight;
 			var positions = [];
 			var colors = [];
@@ -167,13 +176,17 @@
 			var altitud = [];
 			var alt;
 			
+			var labels = new THREE.Object3D();
+
+			var lab = $('.label');
+			
 			// viewport
 
 			init();
 			animate();
 			
 			function init() {
-
+				
 				renderer = new THREE.WebGLRenderer( { antialias: true, preserveDrawingBuffer: true  } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setClearColor( 0x000000, 0.0 );
@@ -182,9 +195,11 @@
 
 				scene = new THREE.Scene();
 				scene.add(group);
+				renderLabels();
+				scene.add(labels);
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-				camera.position.set( 0, -90, 200 );
+				camera.position.set( 0, -90, 300 );
 				camera3 = new THREE.OrthographicCamera( -150 * aspectRatio, 150 * aspectRatio, 150, -150, 0.1, 1000 );
 				camera3.position.set( 0, 0, 350 );
 				camera3.rotation.set( 0, 0, 0 );
@@ -248,7 +263,7 @@
 			
 					var uniforms = {    // custom uniforms (your textures)
 
-					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E6.png') },
+					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( '') },
 					tSec: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/pnoa.jpg' ) }
 					};
 					
@@ -258,7 +273,7 @@
 						fragmentShader: fragShader
 					});
 				
-					var geometry = new THREE.PlaneGeometry(300, 300, 199, 199);
+					var geometry = new THREE.PlaneGeometry(300, 300, 99, 99);
 			
 					for (var i = 0, l = geometry.vertices.length; i < l; i++) {
 						geometry.vertices[i].z = data[i] / 65535 * 310;
@@ -297,6 +312,32 @@
 
 			}
 			
+			function renderLabels() {
+				for ( i = 0; i < lab.length; i++ ) {
+					var label = new THREE.Object3D();
+					var coords = $(lab[i]).data('coords');
+				
+					var queryMarker = new THREE.Mesh(new THREE.SphereGeometry(.5),
+								new THREE.MeshBasicMaterial({
+										color: 0x990000
+								}));
+					queryMarker.scale.set(2,2,2);
+					queryMarker.position.set( coords[0], coords[1], coords[2] );
+					label.add(queryMarker);
+					
+					// CONNECTOR
+					
+					var geomConn = new THREE.Geometry();
+					var pto1 = new THREE.Vector3( coords[0], coords[1], coords[2] );
+					var pto2 = new THREE.Vector3( coords[0], coords[1], coords[2] + 10 );
+					geomConn.vertices.push(pto1, pto2);
+					matConn = new THREE.LineBasicMaterial();
+					conn = new THREE.Line(geomConn, matConn);
+					label.add(conn);
+					labels.add(label);
+					console.log(labels);
+				}
+			}
 
 			function onWindowResize() {
 				
@@ -331,6 +372,8 @@
 					renderer.render( scene, camera3 );
 
 				}
+				
+				updateLabel();
 
 				renderer2.render(scene2, camera2);
 

@@ -262,3 +262,9 @@ body {
 	background-repeat: no-repeat;
 }
 
+.label {
+	padding: 2px;
+	text-shadow: -1px -1px #000, 0px -1px #FFF, 1px -1px #000, -1px 0px #000, 1px 0px #000, -1px 1px #000, 0px 1px #000, 1px 1px #000;
+	position: absolute;
+	pointer-events: none;
+}
