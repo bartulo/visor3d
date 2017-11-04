@@ -273,7 +273,7 @@ function iconClicked() {
 	
 		for ( i = 0; i < group.children.length; i++ ) {
 			
-			$('.icon_list').append('<li class="list-group-item">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
+			$('.icon_list').append('<li class="list-group-item" onmouseover="hoverIcon()" onmouseout="unhoverIcon()">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
 			
 			$( 'button.close' ).last()[0].addEventListener( 'click', eraseIcon, false );
 		
