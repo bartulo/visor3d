@@ -7,7 +7,7 @@ body {
 #brujula {
     width: 200px;
     height: 200px;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(255, 255, 255 ,0.4);
     margin:20px;
     padding:0px;
     position: absolute;

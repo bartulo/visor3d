@@ -636,7 +636,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 		} else if ( state === STATE.ROTATE ) {
 			
 			if ( scope.noRotate === true ) return;
-
+			
 			rotateEnd.set( event.clientX, event.clientY );
 			rotateDelta.subVectors( rotateEnd, rotateStart );
 
