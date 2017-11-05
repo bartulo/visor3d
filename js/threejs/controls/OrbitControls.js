@@ -103,6 +103,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	// Set to true to disable use of the keys
 	this.noKeys = false;
+	
+	this.prueba = phiDelta;
 
 	// The four arrow keys and additional keys
 	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40, AUTOROTATE: 82, UPSIDEDOWN: 85, ERASE: 66, CLEAR: 67 };
@@ -183,8 +185,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	this.cameraRotateLeft = function ( angle ) {
 		
-		console.log( 'cameraRotateLeft' );
-
 		cameraThetaDelta -= angle;
 
 	};
@@ -390,7 +390,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 		}
 
 		this.object.lookAt( this.target );
-		console.log( this.target );
 
 		thetaDelta = 0;
 		phiDelta = 0;

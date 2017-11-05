@@ -235,7 +235,7 @@ function saveImage() {
 	
 		var canvas = renderer.domElement;
 		
-		var imgData = canvas.toDataURL('image/jpeg');
+		//~ var imgData = canvas.toDataURL('image/jpeg');
 		
 		var imgLink = document.createElement('a');
 		
