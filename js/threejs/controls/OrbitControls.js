@@ -593,7 +593,7 @@ THREE.OrbitControls = function ( object, domElement ) {
             
             var l = vect.length();
             
-            $('.medicion').text( (l*(3/300)).toPrecision(3) + ' Km');
+            $('.medicion').text( (l*(7/300)).toPrecision(3) + ' Km');
             
             for (i = 1; i < 15; i++) {
 				
