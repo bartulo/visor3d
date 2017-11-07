@@ -268,7 +268,7 @@
 			
 					var uniforms = {    // custom uniforms (your textures)
 
-					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E5.png') },
+					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E2.png') },
 					tSec: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/pnoa.jpg' ) }
 					};
 					
@@ -278,10 +278,10 @@
 						fragmentShader: fragShader
 					});
 				
-					var geometry = new THREE.PlaneGeometry(300, 300, 279, 279);
+					var geometry = new THREE.PlaneGeometry(300, 300, 199, 199);
 			
 					for (var i = 0, l = geometry.vertices.length; i < l; i++) {
-						geometry.vertices[i].z = data[i] / 65535 * 4000;
+						geometry.vertices[i].z = data[i] / 65535 * 10000;
 					}
 				
 					plane = new THREE.Mesh(geometry, material_shh);
