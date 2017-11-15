@@ -34,13 +34,11 @@
 		<div id="container">
 
 			<div class="label_container">
-				<div class="label" data-coords="[ -38, 94, 59 ]" data-color="#b53e3e">A 01</div>
-				<div class="label" data-coords="[ 0, 98, 58 ]" data-color="#b53e3e">A 02</div>
-				<div class="label" data-coords="[ 33, 94, 58 ]" data-color="#b53e3e">A 03</div>
-				<div class="label" data-coords="[ 84, 74, 57 ]" data-color="#b53e3e">A 04</div>
-				<div class="label" data-coords="[ 121, 55, 57 ]" data-color="#b53e3e">A 05</div>
-				<div class="label" data-coords="[ -38, -8, 65 ]" data-color="#b53e3e">A 06</div>
-				<div class="label" data-coords="[ -82, -48, 69 ]" data-color="#b53e3e">A 07</div>
+				<div class="label" data-coords="[ -32, 93, 78 ]" data-color="#b53e3e">A 01</div>
+				<div class="label" data-coords="[ 18, 128, 69 ]" data-color="#b53e3e">A 02</div>
+				<div class="label" data-coords="[ 125, 66, 61 ]" data-color="#b53e3e">A 03</div>
+				<div class="label" data-coords="[ 129, 12, 59 ]" data-color="#b53e3e">A 04</div>
+				<div class="label" data-coords="[ 88, -108, 57 ]" data-color="#b53e3e">A 05</div>
 			</div>
 					
 			<ul class='tabs'>
@@ -268,7 +266,7 @@
 			
 					var uniforms = {    // custom uniforms (your textures)
 
-					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E2.png') },
+					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E4.png') },
 					tSec: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/pnoa.jpg' ) }
 					};
 					
@@ -278,10 +276,10 @@
 						fragmentShader: fragShader
 					});
 				
-					var geometry = new THREE.PlaneGeometry(300, 300, 199, 199);
+					var geometry = new THREE.PlaneGeometry(300, 300, 239, 239);
 			
 					for (var i = 0, l = geometry.vertices.length; i < l; i++) {
-						geometry.vertices[i].z = data[i] / 65535 * 10000;
+						geometry.vertices[i].z = data[i] / 65535 * 8000;
 					}
 				
 					plane = new THREE.Mesh(geometry, material_shh);
