@@ -1,4 +1,4 @@
-var color = '#fa7e5c';
+var color = '#ffccff';
 var grosor = 4;
 var interval;
 
@@ -53,7 +53,7 @@ function closeTab(index) {
 	
 function openTab() {
 	$('#sidebar')[0].style.marginLeft = '0px'; 
-	$('.tabs > li').css('left', '300px');
+	$('.tabs > li').css('left', '200px');
 }
 
 function stopClicked() {
@@ -227,33 +227,96 @@ function colorClicked(){
 	color = $(this).attr("data-color");
 };	
 
+
+function dataURItoBlob(dataURI) {
+	// convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString}); 	
+}
+
+
 function saveImage() {
-	
 	camera3Active = true;
 	
 	setTimeout(function() {
+		
+		
+		
+		//var image = new Image();
+
+		// var canvas = renderer.domElement;
+		
+		// image.src = canvas.toDataURL('image/jpeg');
+		
+		//var imgLink = document.createElement('a');
+		
+		// document.body.appendChild(imgLink);
+		
+		// imgLink.download = 'prueba.jpg';
+		
+		//imgLink.click();
+		
+		// document.body.removeChild(imgLink);
 	
-		var canvas = renderer.domElement;
-		
-		//~ var imgData = canvas.toDataURL('image/jpeg');
-		
-		var imgLink = document.createElement('a');
-		
-		document.body.appendChild(imgLink);
-		
-		imgLink.download = 'prueba.jpg';
-		
-		imgLink.href = imgData.replace('image/jpeg', 'image/octet-stream');
-		
-		imgLink.click();
-		
-		document.body.removeChild(imgLink);
-	
+
+        var blob = dataURItoBlob(imgData);  
+        
 		camera3Active = false;
 		
+		$('.myprogress').css('width', '0');
+        $('.msg').text('');
+        
+        var formData = new FormData();
+        formData.append('myfile', blob);
+        
+        $('#btn').attr('disabled', 'disabled');
+        $('.msg').text('Guardando Imagen');
+
+        $.ajax({
+            url: 'uploadscript.php',
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            // this part is progress bar
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 100);
+                        $('.myprogress').text(percentComplete + '%');
+                        $('.myprogress').css('width', percentComplete + '%');
+                    }
+                }, false);
+                return xhr;
+            },
+            success: function (data) {
+            	var result = $.parseJSON(data);
+
+                $('.msg').text(result.msg);
+                $('#btn').removeAttr('disabled');
+                $('#edit-field-guardar-imagen-dibujada-und-0-value', window.parent.document).val('<img src="/sites/default/files/visor3d/1f/uploads/' + result.name + '.' + result.ext + '">');
+            }
+        });
+		
 	},200);
-	
 }
+
 
 function iconClicked() {
 	

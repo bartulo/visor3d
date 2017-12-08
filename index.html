@@ -30,7 +30,14 @@
 	</head>
 
 	<body>
-
+		<div class="zoom">
+			<button class="btn btn-primary" onclick="setZoom(0.9)">
+				<span>Zoom -</span>
+			</button>
+			<button class="btn btn-primary" onclick="setZoom(1.1)">
+				<span>Zoom +</span>
+			</button>
+		</div>
 		<div id="container">
 
 			<div class="label_container">
@@ -45,7 +52,7 @@
 				<li>PINTAR</li>
 				<li>MEDIR</li>
 				<li>ICONOS</li>
-				<li>IMAGEN</li>
+				<li>GUARDAR</li>
 			</ul>
 			<div id="sidebar">
 				<ul class="tab_content">
@@ -54,14 +61,16 @@
 							<h2 class="text-color">Elige un color:</h2>
 						
 							<ul class="colors">
-								<li data-color="#00b0f0"></li>
+								<li class="active-color" data-color="#ffccff"></li>
+								<li data-color="#0000ff"></li>
 								<li data-color="#ff0000"></li>
-								<li data-color="#92d050"></li>
-								<li class="active-color" data-color="#fa7e5c"></li>
+								<li data-color="#008000"></li>
+								<li data-color="#ffff00"></li>
+								<li data-color="#ffa500"></li>
 								<li data-color="#000000"></li>
-								<li data-color="#fab8f2"></li>
-								<li data-color="#944607"></li>
-							</ul>
+                                                                <li data-color="#00FFFF"></li>
+                                                    		<li data-color="#FFFFFF"></li>
+                                                        </ul>
 							<div class="slide_wrapper">
 								<input id="sliderColor" type="range" min="4" max="20" step="1" value="8"/>
 							</div>
@@ -108,12 +117,22 @@
 					
 					<li>
 						<div class="content_wrapper">
-							<h2 class="text-color">Guardar Imagen</h2>
 							<div class="button_wrapper">
-								<button type="button" class="btn btn-danger stop">Volver</button>
 								<button type="button" class="btn" id="saveImg">Guardar Imagen</button>
 							</div>
+					            <div class="row">
+					                <form id="myform" method="post">
+					                    <div class="form-group">
+					                        <div class="progress">
+					                            <div class="progress-bar progress-bar-success myprogress" role="progressbar" style="width:0%">0%</div>
+					                        </div>
+					 
+					                        <div class="msg"></div>
+					                    </div>
+					                </form>
+					            </div>
 						</div>
+						 					
 					</li>
 					
 				</ul>
@@ -253,6 +272,7 @@
 				scene.add(iconsGroup);
 
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
+				controls.noZoom = true;
 				controls.minDistance = 0;
 				controls.maxDistance = 500;
 				
@@ -266,7 +286,7 @@
 			
 					var uniforms = {    // custom uniforms (your textures)
 
-					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E4.png') },
+					tOne: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/E2.png') },
 					tSec: { type: "t", value: THREE.ImageUtils.loadTexture( 'images/pnoa.jpg' ) }
 					};
 					
@@ -365,6 +385,11 @@
 
 				updateCompass();
 
+			}
+			
+			function setZoom(scale) {
+				controls.dollyIn(scale);
+				controls.update();
 			}
 
 		</script>
