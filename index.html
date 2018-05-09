@@ -34,10 +34,6 @@
 		<div id="container">
 
 			<div class="label_container">
-				<div class="label" data-coords="[ -115, 36, 48 ]">Inicio 3</div>
-				<div class="label" data-coords="[ -82, -32, 57 ]">Inicio 2</div>
-				<div class="label" data-coords="[ -31, -64, 65 ]">Inicio 1</div>
-				<div class="label" data-coords="[ 2, 36, 58 ]">Inicio 4</div>
 			</div>
 					
 			<ul class='tabs'>
@@ -178,10 +174,6 @@
 			var altitud = [];
 			var alt;
 			
-			var labels = new THREE.Object3D();
-
-			var lab = $('.label');
-			
 			// viewport
 
 			init();
@@ -197,8 +189,10 @@
 
 				scene = new THREE.Scene();
 				scene.add(group);
-				renderLabels();
-				scene.add(labels);
+				var prueba = new V3D.label([0,0,70], 'prueba');
+
+				//~ V3D.labels.render();
+				//~ scene.add(labels);
 
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 				camera.position.set( 0, -90, 300 );
@@ -290,33 +284,6 @@
 				onWindowResize();
 			}
 			
-			function renderLabels() {
-				for ( i = 0; i < lab.length; i++ ) {
-					var label = new THREE.Object3D();
-					var coords = $(lab[i]).data('coords');
-				
-					var queryMarker = new THREE.Mesh(new THREE.SphereGeometry(.5),
-								new THREE.MeshBasicMaterial({
-										color: 0x990000
-								}));
-					queryMarker.scale.set(2,2,2);
-					queryMarker.position.set( coords[0], coords[1], coords[2] );
-					label.add(queryMarker);
-					
-					// CONNECTOR
-					
-					var geomConn = new THREE.Geometry();
-					var pto1 = new THREE.Vector3( coords[0], coords[1], coords[2] );
-					var pto2 = new THREE.Vector3( coords[0], coords[1], coords[2] + 10 );
-					geomConn.vertices.push(pto1, pto2);
-					matConn = new THREE.LineBasicMaterial();
-					conn = new THREE.Line(geomConn, matConn);
-					label.add(conn);
-					labels.add(label);
-					console.log(labels);
-				}
-			}
-			
 			function updateCompass() {
 				var vector = new THREE.Vector3();
 				vector.copy( camera.position ).sub( controls.target );
@@ -359,7 +326,11 @@
 
 				}
 				
-				updateLabel();
+				for (i=0; i < V3D.labels.length; i++) {
+					
+					V3D.labels[i].update();
+					
+				}
 
 				updateCompass();
 
