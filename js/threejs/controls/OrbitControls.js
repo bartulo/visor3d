@@ -723,33 +723,9 @@ THREE.OrbitControls = function ( object, domElement ) {
 		mouseUpPoint.set( event.clientX, event.clientY );
 		if ( event.button == 0 && mouseDownPoint.equals( mouseUpPoint ) && a == 2 ) {
 			
-			p = getIntesection();
-			
-			console.log(p);
-			
-			var iconIndex = $('.icon >li a.active').parent().index();
-			
-			var group = iconsGroup.children[iconIndex];
-			
-			console.log( group );
-			
-			if (group.visible == false ) { 
-				
-				group.visible = true; 
-			
-			} else {
-				
-				var newIcon = group.children[0].clone();
-				
-				group.add( newIcon );
-				
-			}
-			
-		    group.children[ group.children.length - 1 ].position.set(p.x, p.y, p.z + 10 );
-		    
-			$('.icon_list').append('<li class="list-group-item" onmouseover="hoverIcon()" onmouseout="unhoverIcon()">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
-			
-			$('.icon_list').children().last().children()[0].addEventListener( 'click', eraseIcon, false );
+			coords = getIntesection();
+			var type = $('.icon >li a.active').parent()[0].dataset.img;
+			var icon = new V3D.Icon(type, coords);
 		    
 		}
 

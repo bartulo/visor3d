@@ -114,27 +114,6 @@ function eraseLine( event ) {
 	
 }
 
-function eraseIcon( event ) {
-	var index = $(event.target.parentElement).index();
-	
-	var iconIndex = $('.icon >li a.active').parent().index();
-	
-	$('.icon_list > li')[index].remove();
-
-	iconsGroup.children[iconIndex].children[index].scale.set( 1, 1, 1 ); 
-	
-	if ( iconsGroup.children[iconIndex].children.length == 1 ) {
-		
-		iconsGroup.children[iconIndex].visible = false;
-		
-	} else {
- 	
-		iconsGroup.children[iconIndex].remove(iconsGroup.children[iconIndex].children[index]);
-		
-	}
-	
-}
-
 function hoverLine( event ) {
 	if ( event.target.tagName === 'LI' ) {
 	
@@ -181,40 +160,6 @@ function unhoverLine( event ) {
 	group.children[index].material.visible = true;
 }
 
-function hoverIcon() {
-	if ( event.target.tagName === 'LI' ) {
-	
-		var index = $(event.target).index();
-		
-	} else if ( event.target.tagName === 'BUTTON' ) {
-	
-		var index = $(event.target.parentElement).index();
-		
-	}
-	
-	var iconIndex = $('.icon >li a.active').parent().index();
-	
-	iconsGroup.children[iconIndex].children[index].scale.set( 1.5, 1.5, 1.5 );
-
-}
-
-function unhoverIcon() {
-	if ( event.target.tagName === 'LI' ) {
-	
-		var index = $(event.target).index();
-		
-	} else if ( event.target.tagName === 'BUTTON' ) {
-	
-		var index = $(event.target.parentElement).index();
-		
-	}
-
-	var iconIndex = $('.icon >li a.active').parent().index();
-
-	iconsGroup.children[iconIndex].children[index].scale.set( 1, 1, 1 );
-
-}
-	
 function colorClicked(){
 
 	// Remove class from currently active button
@@ -328,21 +273,21 @@ function iconClicked() {
 	
 	var list = $('.icon_list');
 	
-	list.children().remove();
+	//~ list.children().remove();
 		
-	var group = iconsGroup.children[index];
+	//~ var group = iconsGroup.children[index];
 	
-	if ( group.visible != false ) {
+	//~ if ( group.visible != false ) {
 	
-		for ( i = 0; i < group.children.length; i++ ) {
+		//~ for ( i = 0; i < group.children.length; i++ ) {
 			
-			$('.icon_list').append('<li class="list-group-item" onmouseover="hoverIcon()" onmouseout="unhoverIcon()">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
+			//~ $('.icon_list').append('<li class="list-group-item" onmouseover="hoverIcon()" onmouseout="unhoverIcon()">Icono <button type="button" class="close" aria-label="Close">x</button></li>');
 			
-			$( 'button.close' ).last()[0].addEventListener( 'click', eraseIcon, false );
+			//~ $( 'button.close' ).last()[0].addEventListener( 'click', eraseIcon, false );
 		
-		}
+		//~ }
 		
-	}
+	//~ }
 
 };
 					
