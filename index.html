@@ -64,9 +64,9 @@
 								<li data-color="#ffff00"></li>
 								<li data-color="#ffa500"></li>
 								<li data-color="#000000"></li>
-                                                                <li data-color="#00FFFF"></li>
-                                                    		<li data-color="#FFFFFF"></li>
-                                                        </ul>
+								<li data-color="#00FFFF"></li>
+								<li data-color="#FFFFFF"></li>
+							</ul>
 							<div class="slide_wrapper">
 								<input id="sliderColor" type="range" min="4" max="20" step="1" value="8"/>
 							</div>
@@ -185,6 +185,7 @@
 			var colors = [];
 			var brujula_width = 200;
 			var brujula_height = 200;
+			var group = new THREE.Object3D();
 			var a = -1;
 			var b = 0;
 			var camera3Active = false;
@@ -206,6 +207,7 @@
 				document.getElementById('container').appendChild( renderer.domElement );
 
 				scene = new THREE.Scene();
+				scene.add(group);
 
 				var prueba = new V3D.label([0,0,70], 'prueba');
 
