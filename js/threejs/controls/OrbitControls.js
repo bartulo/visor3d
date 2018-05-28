@@ -66,6 +66,9 @@ THREE.OrbitControls = function ( object, domElement ) {
 	// "target" sets the location of focus, where the control orbits around
 	// and where it pans with respect to.
 	this.target = new THREE.Vector3();
+	this.target.x = 452000;
+	this.target.y = 4158000;
+	this.target.z = 800;
 
 	// center is old, deprecated; use "target" instead
 	this.center = this.target;
@@ -295,7 +298,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 	};
 
 	this.update = function () {
-
+		
 		var position = this.object.position;
 
 		// move target to panned location
@@ -309,6 +312,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		if ( thetaDelta || phiDelta ) {
 			
+			console.log(this.maxDistance);
+			
 			offset.copy( position ).sub( this.target );
 
 			// angle from y-axis around z-axis
@@ -320,10 +325,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 			theta += thetaDelta;
 			phi += phiDelta;
 			
-			console.log( 'theta: '+ theta );
-			console.log( 'phi: ' + phi );
-			console.log( offset );
-
 			// restrict phi to be between desired limits
 			phi = Math.max( this.minPolarAngle, Math.min( this.maxPolarAngle, phi ) );
 
@@ -331,9 +332,12 @@ THREE.OrbitControls = function ( object, domElement ) {
 			phi = Math.max( EPS, Math.min( Math.PI - EPS, phi ) );
 
 			var radius = offset.length() * scale;
+			
+			console.log(radius);
 
 			// restrict radius to be between desired limits
 			radius = Math.max( this.minDistance, Math.min( this.maxDistance, radius ) );
+			console.log(radius);
 
 			offset.x = radius * Math.sin( phi ) * Math.sin( theta );
 			offset.y = radius * Math.sin( phi ) * Math.cos( theta );
